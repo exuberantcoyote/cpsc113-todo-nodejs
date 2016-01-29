@@ -21,13 +21,18 @@ app.get('/', function (req, res) {
 });
 
 app.post('/user/register', function (req, res) {
+  if(req.body.password != req.body.password_confirmation){
+    return res.render('index', {errors: 'Password does not match'});
+  }
+  
   var newUser = new Users();
   newUser.hashed_pwrd = req.body.password;
   newUser.email = req.body.email;
   newUser.name = req.body.fl_name;
   newUser.save(function(err){
     if(err){
-      res.send('there was an error saving this user');
+      res.render('index', {errors: err});
+      //res.send('there was an error saving this user');
     }else{
       res.redirect('/');
     }

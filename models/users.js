@@ -4,10 +4,20 @@ mongoose.connect('mongodb://localhost:27017/todo-db');
 var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
+var stringField = {
+    type: String,
+    minlength: 1,
+    maxlength: 50
+}
 var UserSchema = new Schema({
-    email: String,
-    name: String,
-    hashed_pwrd: String,
+    email: {
+        type: String,
+        minlength: 1,
+        maxlength: 50,
+        lowercase: true
+    },
+    name: stringField,
+    hashed_pwrd: stringField,
 });
 
 UserSchema.statics.count = function (cb) {
