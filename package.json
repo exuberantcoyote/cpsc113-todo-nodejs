@@ -1,0 +1,25 @@
+{
+  "name": "cpsc113-todo-nodejs",
+  "version": "1.0.0",
+  "description": "Trent's todo app v1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/exuberantcoyote/cpsc113-todo-nodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/exuberantcoyote/cpsc113-todo-nodejs/issues"
+  },
+  "homepage": "https://github.com/exuberantcoyote/cpsc113-todo-nodejs#readme",
+  "dependencies": {
+    "express": "^4.13.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.8.1"
+  }
+}
