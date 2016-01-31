@@ -1,7 +1,7 @@
-<h1>Trent's Killer Social Todo App - CPSC113</h1>
+<h1>CPSC113 Todo</h1>
 
 {{#if errors}}
-<div style="color:red">
+<div style="color:red" class="validation-error">
     {{errors}}
 </div>
 {{/if}}
@@ -13,7 +13,15 @@
         {{#if tasks}}
             <ul>
             {{#each tasks}}
-                <li>{{this.title}}</li>
+                <li class="tasks-list-item">
+                  <span class="task-title">{{this.title}}</span>
+                  <form method="post">
+                    <input type="button" name="delete-task" class="delete-task" value="Delete">
+                  </form>
+                  <form method="post">
+                    <input type="button" name="toggle-task" class="toggle-task" value="Mark complete">
+                  </form>
+                </li>
             {{/each}}
             </ul>
         {{else}}
@@ -23,7 +31,7 @@
     <hr>
     <div>
         <h4>Add a new task</h4>
-        <form action="/tasks/create" method="POST">
+        <form action="/task/create" method="POST">
             <label for="title">Task Title</label>
             <input name="title" type="text"><br>
             <label for="description">Task Description</label>
@@ -43,7 +51,7 @@
         <input name="email" type="text"><br>
         <label for="password">Password</label>
         <input name="password" type="text"><br>
-        <input type="submit">
+        <input type="submit" class="log-in-submit">
     </form>
 </div>
 
@@ -55,9 +63,7 @@
       <input name="email" type="email" class="text-input" placeholder="email">
       <input name="password" type="password" class="text-input" placeholder="password">
       <input name="password_confirmation" type="password" class="text-input" placeholder="password confirmation">
-      <div>
-        <button class="blue sign-up-submit">Sign Up</button>
-      </div>
+      <input class="sign-up-submit" type="submit">
     </form>
 </div>
 {{/if}}
