@@ -5,7 +5,10 @@ var app = express();
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoDBStore = require('connect-mongodb-session')(session);
+var mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_URL);
 var Users = require('./models/users.js');
+var Tasks = require('./models/tasks.js');
 
 // Configuration
 var store = new MongoDBStore({ 
@@ -48,20 +51,32 @@ app.use(function(req, res, next){
   }
 })
 
+function isLoggedIn(req, res, next){
+  if(res.locals.currentUser){
+    next();
+  }else{
+    res.sendStatus(403);
+  }
+}
+
+function loadUserTasks(req, res, next) {
+  if(!res.locals.currentUser){
+    return next();
+  }
+  Tasks.find({}).or([
+      {owner: res.locals.currentUser},
+      {collaborators: res.locals.currentUser.email}])
+    .exec(function(err, tasks){
+      if(!err){
+        res.locals.tasks = tasks;
+      }
+      next();
+  });
+}
 
 // Controllers
-app.get('/', function (req, res) {
-//  res.render('index');
-  Users.count(function (err, users) {
-    if (err) {
-      res.send('error getting users');
-    }else{
-      res.render('index', {
-        userCount: users.length,
-        currentUser: res.locals.currentUser
-      });
-    }
-  });
+app.get('/', loadUserTasks, function (req, res) {
+  res.render('index');
 });
 
 app.post('/user/register', function (req, res) {
@@ -84,7 +99,6 @@ app.post('/user/register', function (req, res) {
       res.redirect('/');
     }
   })
-  //res.send(req.body);
 });
 
 app.post('/user/login', function (req, res) {
@@ -111,6 +125,24 @@ app.post('/user/login', function (req, res) {
 app.get('/user/logout', function(req, res){
   req.session.destroy();
   res.redirect('/');
+})
+
+// Below controllers require user to be logged in
+app.use(isLoggedIn);
+
+app.post('/tasks/create', function(req, res){
+  var newTask = new Tasks();
+  newTask.owner = res.locals.currentUser._id;
+  newTask.title = req.body.title;
+  newTask.description = req.body.description;
+  newTask.collaborators = [req.body.collaborator1, req.body.collaborator2, req.body.collaborator3];
+  newTask.save(function(err, savedTask){
+    if(err || !savedTask){
+      res.send('Error saving task.');
+    }else{
+      res.redirect('/');
+    }
+  });
 })
 
 app.listen(process.env.PORT, function () {
