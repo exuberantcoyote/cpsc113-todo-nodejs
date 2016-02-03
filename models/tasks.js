@@ -5,12 +5,14 @@ var Schema = mongoose.Schema,
 
 var stringField = {
     type: String,
-    minlength: 1,
-    maxlength: 50
+    minlength: 1
+//    maxlength: 500
 }
 
 var TaskSchema = new Schema({
+    taskId: Number,
     owner: ObjectId,
+    isOwner: Boolean,  //is currentUser the owner?
     title: stringField,
     description: stringField,
     isComplete: Boolean,

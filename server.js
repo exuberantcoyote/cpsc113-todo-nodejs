@@ -11,6 +11,7 @@ var Users = require('./models/users.js');
 var Tasks = require('./models/tasks.js');
 
 // Configuration
+var taskCounter = 0;
 var store = new MongoDBStore({ 
   uri: process.env.MONGO_URL,
   collection: 'sessions'
@@ -68,6 +69,16 @@ function loadUserTasks(req, res, next) {
   if(!res.locals.currentUser){
     return next();
   }
+  Tasks.update({isOwner: true }, { isOwner: false}, function (err) {
+  if (err){
+    console.log('error1');
+    } 
+  });
+  Tasks.update({owner: res.locals.currentUser}, { isOwner: true}, function (err) {
+  if (err){
+    console.log('error2');
+    } 
+  });
   Tasks.find({}).or([
       {owner: res.locals.currentUser},
       {collaborators: res.locals.currentUser.email}])
@@ -139,9 +150,13 @@ app.use(isLoggedIn);
 // Handle submission of form, create new task
 app.post('/task/create', function(req, res){
   var newTask = new Tasks();
+  taskCounter+=1;
+  newTask.taskId = taskCounter;
   newTask.owner = res.locals.currentUser._id;
   newTask.title = req.body.title;
   newTask.description = req.body.description;
+  newTask.isComplete = false;
+  newTask.isOwner = false;
   newTask.collaborators = [req.body.collaborator1, req.body.collaborator2, req.body.collaborator3];
   newTask.save(function(err, savedTask){
     if(err || !savedTask){
@@ -150,6 +165,52 @@ app.post('/task/create', function(req, res){
       res.redirect('/');
     }
   });
+});
+
+
+app.post('/task/toggle-complete', function(req,res){
+
+//  if(req.body.isComplete){
+//   console.log(req.body.taskId + 'NOT Complete TO Complete');
+//   }else{
+//   console.log(req.body.taskId +'Complete TO NOT Complete');
+//  }
+//  var UpdatedisComplete = [Boolean];
+  
+//  Tasks.findOne({ taskId: req.body.taskId }, 'title taskId isComplete', function (err, task) {
+//    if(err){
+//      console.log('error');
+//    } 
+//    console.log(task.title + task.isComplete);
+//    UpdatedisComplete = !task.isComplete;
+    //task.isComplete = !task.isComplete;
+    //console.log(UpdatedisComplete);
+    //Tasks.update({ taskId: task.taskId }, {isComplete: task.isComplete} );
+    //Tasks.FindOneAndUpdate({ taskId: req.body.taskId },  {isComplete: task.isComplete});
+//  });
+  
+  Tasks.findOneAndUpdate({ taskId: req.body.taskId },  { isComplete: req.body.changeStatus }, function (err, result) {
+    if(err){
+      console.log('error');
+    } 
+//    console.log(result.title + " " + result.isComplete);
+    });
+//  Tasks.findOne( {taskId: req.body.taskId} ); 
+//  Tasks.update( { taskId: req.body.taskId }, { $set: { isComplete: !req.body.isComplete }});
+  res.redirect('/');
+});
+  
+
+app.post('/task/delete', function(req,res){
+{$or : [{a: 3}, {b: 4}]}
+  //res.locals.currentUser._id;
+  //req.session.userId
+  Tasks.remove({$and : [{taskId: req.body.DeleteId}, {owner: res.locals.currentUser._id}]}, function (err) {
+  if (err){
+    console.log('error');
+    } 
+  });
+  res.redirect('/');
 });
 
 // Start server
