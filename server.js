@@ -110,18 +110,20 @@ app.post('/user/register', function (req, res) {
     if(user && !err){
       req.session.userId = user._id;
       res.redirect('/');
-      console.log("GOOD: " + newUser.name + " " + newUser.email + " " + newUser.hashed_pwrd);
+//      console.log("GOOD: " + newUser.name + " " + newUser.email + " " + newUser.hashed_pwrd);
+    }else{
+      var errormsg = "Error registering user.";
+//      if(err){
+        if(err.errmsg && err.errmsg.match(/duplicate/)){
+          errormsg = 'Account with this email already exists!';
+        }
+//        console.log("BAD: " + newUser.name + " " + newUser.email + " " + errormsg + " " + newUser.hashed_pwrd);
+        return res.render('index', {errors: errormsg});
+//      }
     }
-    var errors = "Error registering user.";
-    if(err){
-      if(err.errmsg && err.errmsg.match(/duplicate/)){
-        errors = 'Account with this email already exists!';
-      }
-      console.log("BAD: " + newUser.name + " " + newUser.email + " " + newUser.hashed_pwrd);
-      return res.render('index', {errors: errors});
-    }
- });
+  });
 });
+
 
 
 app.post('/user/login', function (req, res) {
