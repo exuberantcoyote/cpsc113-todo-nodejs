@@ -47,7 +47,7 @@
     <section class="tasks">
         <fieldset class="tasks-list">
             {{#if tasks}}
-            
+                <h3>Todo List</h3>
                 {{#each tasks}}
                     <div class="tasks-list-item{{#if this.isComplete}} complete-task {{else}} {{/if}}">
                         <span class="tasks-list-desc task-title">{{#if this.isComplete}}<strike>{{/if}}{{this.title}}{{#if this.isComplete}}</strike>{{/if}}</span>
@@ -78,6 +78,7 @@
     
 {{else}}
 <div>
+    <h3>Login</h3>
     <form class="login-form" action="/user/login" method="POST">
         <label for="email">Email</label>
         <input name="email" type="text"><br>
@@ -90,11 +91,12 @@
 <div><hr></div>
 
 <div>
+    <h3>SignUp</h3>
     <form action="/user/register" method="post" class="signup-form" style="display: block;">
-      <input name="fl_name" type="text" class="text-input" placeholder="first &amp; last name">
-      <input name="email" type="email" class="text-input" placeholder="email">
-      <input name="password" type="password" class="text-input" placeholder="password">
-      <input name="password_confirmation" type="password" class="text-input" placeholder="password confirmation">
+      <input name="fl_name" type="text" class="text-input" placeholder="first &amp; last name"><br>
+      <input name="email" type="email" class="text-input" placeholder="email"><br>
+      <input name="password" type="password" class="text-input" placeholder="password"><br>
+      <input name="password_confirmation" type="password" class="text-input" placeholder="password confirmation"><br>
       <input class="sign-up-submit" type="submit">
     </form>
 </div>
