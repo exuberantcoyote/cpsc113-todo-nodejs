@@ -11,7 +11,6 @@ var Users = require('./models/users.js');
 var Tasks = require('./models/tasks.js');
 
 // Configuration
-var taskCounter = 0;
 var store = new MongoDBStore({ 
   uri: process.env.MONGO_URL,
   collection: 'sessions'
@@ -31,16 +30,6 @@ app.use(session({
   store: store
 }));
 
-//app.use(function(req, res, next){
-//  if(req.session.views){
-//    req.session.views++;
-//  }else{
-//    req.session.views=1;
-//  }
-//  console.log('This persion visited ' + req.session.views + ' times.')
-//  next();
-//})
-
 // look up user for this session
 app.use(function(req, res, next){
   if(req.session.userId){
@@ -55,7 +44,7 @@ app.use(function(req, res, next){
   }
 });
 
-// checks if user is logged in
+// check if user is logged in
 function isLoggedIn(req, res, next){
   if(res.locals.currentUser){
     next();
@@ -70,13 +59,11 @@ function loadUserTasks(req, res, next) {
     return next();
   }
   Tasks.update({}, { isOwner: false }, { multi: true }, function (err) {
-  if (err){
-    console.log('error1');
+    if (err){
     } 
   });
   Tasks.update({ owner: res.locals.currentUser }, { isOwner: true}, { multi: true }, function (err) {
-  if (err){
-    console.log('error2');
+    if (err){
     } 
   });
   Tasks.find({}).or([
@@ -106,28 +93,21 @@ app.post('/user/register', function (req, res) {
   newUser.email = req.body.email;
   newUser.name = req.body.fl_name;
   newUser.save(function(err, user){
-    //req.session.userId = user._id;
     if(user && !err){
       req.session.userId = user._id;
       res.redirect('/');
-//      console.log("GOOD: " + newUser.name + " " + newUser.email + " " + newUser.hashed_pwrd);
     }else{
       var errormsg = "Error registering user.";
-//      if(err){
-        if(err.errmsg && err.errmsg.match(/duplicate/)){
-          errormsg = 'Account with this email already exists!';
-        }
-//        console.log("BAD: " + newUser.name + " " + newUser.email + " " + errormsg + " " + newUser.hashed_pwrd);
-        return res.render('index', {errors: errormsg});
-//      }
+      if(err.errmsg && err.errmsg.match(/duplicate/)){
+        errormsg = 'Account with this email already exists!';
+      }
+      return res.render('index', {errors: errormsg});
     }
   });
 });
 
-
-
 app.post('/user/login', function (req, res) {
-  var user = Users.findOne({email: req.body.email}, function(err, user){
+  Users.findOne({email: req.body.email}, function(err, user){
     if(err || !user){
       res.send('Invalid email address');
       return;
@@ -155,8 +135,6 @@ app.use(isLoggedIn);
 // Handle submission of form, create new task
 app.post('/task/create', function(req, res){
   var newTask = new Tasks();
-  taskCounter+=1;
-  newTask.taskId = taskCounter;
   newTask.owner = res.locals.currentUser._id;
   newTask.title = req.body.title;
   newTask.description = req.body.description;
@@ -172,44 +150,16 @@ app.post('/task/create', function(req, res){
   });
 });
 
-
 app.post('/task/toggle-complete', function(req,res){
-
-//  if(req.body.isComplete){
-//   console.log(req.body.taskId + 'NOT Complete TO Complete');
-//   }else{
-//   console.log(req.body.taskId +'Complete TO NOT Complete');
-//  }
-//  var UpdatedisComplete = [Boolean];
-  
-//  Tasks.findOne({ taskId: req.body.taskId }, 'title taskId isComplete', function (err, task) {
-//    if(err){
-//      console.log('error');
-//    } 
-//    console.log(task.title + task.isComplete);
-//    UpdatedisComplete = !task.isComplete;
-    //task.isComplete = !task.isComplete;
-    //console.log(UpdatedisComplete);
-    //Tasks.update({ taskId: task.taskId }, {isComplete: task.isComplete} );
-    //Tasks.FindOneAndUpdate({ taskId: req.body.taskId },  {isComplete: task.isComplete});
-//  });
-  
   Tasks.findOneAndUpdate({ taskId: req.body.taskId },  { isComplete: req.body.changeStatus }, function (err, result) {
     if(err){
       console.log('error');
     } 
-//    console.log(result.title + " " + result.isComplete);
-    });
-//  Tasks.findOne( {taskId: req.body.taskId} ); 
-//  Tasks.update( { taskId: req.body.taskId }, { $set: { isComplete: !req.body.isComplete }});
+  });
   res.redirect('/');
 });
-  
 
 app.post('/task/delete', function(req,res){
-{$or : [{a: 3}, {b: 4}]}
-  //res.locals.currentUser._id;
-  //req.session.userId
   Tasks.remove({$and : [{taskId: req.body.DeleteId}, {owner: res.locals.currentUser._id}]}, function (err) {
   if (err){
     console.log('error');

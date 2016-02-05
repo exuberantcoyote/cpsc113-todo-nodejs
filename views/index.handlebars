@@ -1,46 +1,43 @@
 <h1>CPSC113 Todo</h1>
 
-
 <div style="color:red" class="validation-error">
     {{#if errors}}
         {{errors}}
     {{/if}}
 </div>
 
-
 {{#if currentUser}}
     <h2>Welcome, {{currentUser.name}}</h2>
 
     <section id="create">
-		<h2 id="toggle-create" style="display: none;">Create a new todo <i class="fa fa-plus"></i></h2>
+		<h2 id="toggle-create">Create a new todo</h2>
 		<div class="container">
 		    <form id="signup" action="/task/create" method="POST">
 		    	<div class="header">
-		        	<h3>Create a new todo</h3>
-		        
-		        <div class="wrap">
-				  <div class="mat-div">
-				    <label for="title" class="mat-label">Title</label>
-				    <input type="text" class="mat-input" id="title" name="title">
-				  </div>
-				  <div class="mat-div">
-				    <label for="description" class="mat-label">Description</label>
-				    <input type="text" class="mat-input" id="description" name="description">
-				  </div>
-				  <div class="mat-div">
-				    <label for="collab-1" class="mat-label">Collaborator 1</label>
-				    <input type="text" class="mat-input" id="collab-1" name="collaborator1">
-				  </div>
-				  <div class="mat-div">
-				    <label for="collab-2" class="mat-label">Collaborator 2</label>
-				    <input type="text" class="mat-input" id="collab-2" name="collaborator2">
-				  </div>
-				  <div class="mat-div">
-				    <label for="collab-3" class="mat-label">Collaborator 3</label>
-				    <input type="text" class="mat-input" id="collab-3" name="collaborator3">
-				  </div>
-				</div>
-			    <button type="submit" form="signup" value="Submit" id="submit">Submit</button>
+                    <h3>Create a new todo</h3>
+                    <div class="wrap">
+    				    <div class="mat-div">
+    				        <label for="title" class="mat-label">Title</label>
+    				        <input type="text" class="mat-input" id="title" name="title">
+    				    </div>
+    				    <div class="mat-div">
+    				        <label for="description" class="mat-label">Description</label>
+    				        <input type="text" class="mat-input" id="description" name="description">
+    				    </div>
+    				    <div class="mat-div">
+    				        <label for="collab-1" class="mat-label">Collaborator 1</label>
+    				        <input type="text" class="mat-input" id="collab-1" name="collaborator1">
+    				    </div>
+    				    <div class="mat-div">
+    				        <label for="collab-2" class="mat-label">Collaborator 2</label>
+    				        <input type="text" class="mat-input" id="collab-2" name="collaborator2">
+    				    </div>
+    				    <div class="mat-div">
+    				        <label for="collab-3" class="mat-label">Collaborator 3</label>
+    				        <input type="text" class="mat-input" id="collab-3" name="collaborator3">
+    				    </div>
+    				</div>
+			        <button type="submit" form="signup" value="Submit" id="submit">Submit</button>
 		        </div>
 		    </form>
 	    </div>
@@ -69,7 +66,7 @@
                         <form action="/task/toggle-complete" method="POST">
                             <input type="hidden" name="taskId" value="{{this.taskId}}">
                             <input type="hidden" name="changeStatus" value="{{#if this.isComplete}}0{{else}}1{{/if}}">
-                            <button type="submit" name="toggle-task" class="toggle-task button">{{#if this.isComplete}}Mark Incomplete{{else}}Mark Complete{{/if}}</button>
+                            <button type="submit" class="toggle-task button">{{#if this.isComplete}}Mark Incomplete{{else}}Mark Complete{{/if}}</button>
                         </form>
                     </div>
                 {{/each}}

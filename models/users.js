@@ -12,6 +12,7 @@ var stringField = {
     maxlength: 50,
     required: true
 }
+
 var UserSchema = new Schema({
     email: {
         type: String,
@@ -55,6 +56,6 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
 
 UserSchema.statics.count = function (cb) {
   return this.model('Users').find({}, cb);
-}
+};
 
 module.exports = mongoose.model('Users', UserSchema);
