@@ -14,7 +14,6 @@
 		<div class="container">
 		    <form id="signup" action="/task/create" method="POST">
 		    	<div class="header">
-                    <h3>Create a new todo</h3>
                     <div class="wrap">
     				    <div class="mat-div">
     				        <input type="text" class="mat-input" id="title" name="title" placeholder="Task Title">
@@ -29,7 +28,7 @@
     				        <input type="text" class="mat-input" id="collab-2" name="collaborator2" placeholder="Collaborater 2">
     				    </div>
     				    <div class="mat-div">
-    				        <input type="text" class="mat-input" id="collab-3" name="collaborator3" placeholder="Collaborater 3">
+    				        <input type="text" class="mat-input" id="collab-3" name="collaborator3" placeholder="Collaborater 3"><br>
     				    </div>
     				</div>
 			        <button type="submit" form="signup" value="Submit" id="submit">Submit</button>
@@ -40,8 +39,8 @@
     <div><br><hr><br></div>
     <section class="tasks">
         <fieldset class="tasks-list">
+            <h3>Todo List</h3>
             {{#if tasks}}
-                <h3>Todo List</h3>
                 {{#each tasks}}
                     <div class="tasks-list-item{{#if this.isComplete}} complete-task {{else}} {{/if}}">
                         <span class="tasks-list-desc task-title">{{#if this.isComplete}}<strike>{{/if}}{{this.title}}{{#if this.isComplete}}</strike>{{/if}}</span>
