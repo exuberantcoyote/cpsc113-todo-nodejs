@@ -1,10 +1,12 @@
 <h1>CPSC113 Todo</h1>
 
-{{#if errors}}
+
 <div style="color:red" class="validation-error">
-    {{errors}}
+    {{#if errors}}
+        {{errors}}
+    {{/if}}
 </div>
-{{/if}}
+
 
 {{#if currentUser}}
     <h2>Welcome, {{currentUser.name}}</h2>
