@@ -19,8 +19,7 @@ var UserSchema = new Schema({
         minlength: 1,
         maxlength: 50,
         lowercase: true,
-        unique: true,
-        required: true
+        unique: true
     },
     name: stringField,
     hashed_pwrd: stringField,
