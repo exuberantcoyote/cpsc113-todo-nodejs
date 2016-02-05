@@ -8,7 +8,7 @@ var MongoDBStore = require('connect-mongodb-session')(session);
 var mongoose = require('mongoose');
 //mongoose.connect(process.env.MONGO_URL);
 var mongoheroku = 'mongodb://webapp:webapp@ds059215.mongolab.com:59215/heroku_spn4kpvw';
-mongoose.conect(mongoheroku);
+mongoose.connect(mongoheroku);
 var Users = require('./models/users.js');
 var Tasks = require('./models/tasks.js');
 
