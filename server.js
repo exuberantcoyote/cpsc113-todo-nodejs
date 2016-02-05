@@ -69,12 +69,12 @@ function loadUserTasks(req, res, next) {
   if(!res.locals.currentUser){
     return next();
   }
-  Tasks.update({isOwner: true }, { isOwner: false}, function (err) {
+  Tasks.update({}, { isOwner: false }, { multi: true }, function (err) {
   if (err){
     console.log('error1');
     } 
   });
-  Tasks.update({owner: res.locals.currentUser}, { isOwner: true}, function (err) {
+  Tasks.update({ owner: res.locals.currentUser }, { isOwner: true}, { multi: true }, function (err) {
   if (err){
     console.log('error2');
     } 
@@ -110,16 +110,19 @@ app.post('/user/register', function (req, res) {
     if(user && !err){
       req.session.userId = user._id;
       res.redirect('/');
+      console.log("GOOD: " + newUser.name + " " + newUser.email + " " + newUser.hashed_pwrd);
     }
     var errors = "Error registering user.";
     if(err){
       if(err.errmsg && err.errmsg.match(/duplicate/)){
         errors = 'Account with this email already exists!';
       }
+      console.log("BAD: " + newUser.name + " " + newUser.email + " " + newUser.hashed_pwrd);
       return res.render('index', {errors: errors});
     }
-  });
+ });
 });
+
 
 app.post('/user/login', function (req, res) {
   var user = Users.findOne({email: req.body.email}, function(err, user){

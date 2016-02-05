@@ -56,15 +56,15 @@
                             <form action="/task/delete" method="POST">
                                 <input type="hidden" name="DeleteId" value="{{this.taskId}}">
                                 <input type="hidden" name="taskOwner" value="{{this.owner}}">
-                                <button type="submit" name="delete" class="delete-task button">Delete</button>
+                                <button type="submit" class="delete-task button">Delete</button>
                             </form>
                         {{else}}
-                            <form action="/task/delete" method="POST">
+                            <form>
                                 <input type="hidden" name="DeleteId" value="{{this.taskId}}">
                                 <input type="hidden" name="taskOwner" value="{{this.owner}}">
                             </form>
                         {{/if}}
-                        <form action="/task/toggle-complete" class="toggle-complete-status" method="POST">
+                        <form action="/task/toggle-complete" method="POST">
                             <input type="hidden" name="taskId" value="{{this.taskId}}">
                             <input type="hidden" name="changeStatus" value="{{#if this.isComplete}}0{{else}}1{{/if}}">
                             <button type="submit" name="toggle-task" class="toggle-task button">{{#if this.isComplete}}Mark Incomplete{{else}}Mark Complete{{/if}}</button>
