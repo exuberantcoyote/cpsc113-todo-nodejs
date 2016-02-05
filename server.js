@@ -6,13 +6,16 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoDBStore = require('connect-mongodb-session')(session);
 var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGO_URL);
+//mongoose.connect(process.env.MONGO_URL);
+var mongoheroku = 'mongodb://webapp:webapp@ds059215.mongolab.com:59215/heroku_spn4kpvw';
+mongoose.conect(mongoheroku);
 var Users = require('./models/users.js');
 var Tasks = require('./models/tasks.js');
 
 // Configuration
 var store = new MongoDBStore({ 
-  uri: process.env.MONGO_URL,
+//  uri: process.env.MONGO_URL,
+  uri: mongoheroku,
   collection: 'sessions'
 });
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
@@ -23,7 +26,8 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 
 // parse cookie, check for existing session with this cookie
 app.use(session({
-  secret: process.env.SESSION_SECRET,
+//  secret: process.env.SESSION_SECRET,
+  secret: 'notsosecret',
   resave: false,
   saveUninitialized: true,
   cookie: { secure: 'auto' },
