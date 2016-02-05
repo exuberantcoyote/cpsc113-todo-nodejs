@@ -9,7 +9,8 @@ var Schema = mongoose.Schema,
 var stringField = {
     type: String,
     minlength: 1,
-    maxlength: 50
+    maxlength: 50,
+    required: true
 }
 var UserSchema = new Schema({
     email: {
@@ -17,7 +18,8 @@ var UserSchema = new Schema({
         minlength: 1,
         maxlength: 50,
         lowercase: true,
-        unique: true
+        unique: true,
+        required: true
     },
     name: stringField,
     hashed_pwrd: stringField,

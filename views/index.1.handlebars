@@ -1,0 +1,74 @@
+<h1>CPSC113 Todo</h1>
+
+{{#if errors}}
+<div style="color:red" class="validation-error">
+    {{errors}}
+</div>
+{{/if}}
+
+{{#if currentUser}}
+    <h2>Welcome, {{currentUser.name}}</h2>
+
+    <section id="create">
+        <h2 id="toggle-create" style="display: none;">
+            Create a new todo 
+            <i class="fa fa-plus"></i>
+        </h2>
+
+        <h4>Add a new task</h4>
+        <form id="signup" action="/task/create" method="POST">
+            <label for="title">Task Title</label>
+            <input id="title" name="title" type="text"><br>
+            <label for="description">Task Description</label>
+            <input id="description" name="description" type="text"><br>
+            Collaborators<br>
+            <input id="collaborator1" name="collaborator1" type="email"><br>
+            <input id="collaborator2" name="collaborator2" type="email"><br>
+            <input id="collaborator3" name="collaborator3" type="email"><br>
+            <button type="submit">Submit</button>
+        </form>
+    </section> 
+    
+      
+    <section class="tasks">
+        {{#if tasks}}
+            <fieldset class="tasks-list">
+                {{#each tasks}}
+                    <div class="tasks-list-item ">
+                      <span class="tasks-list-desc task-title">{{this.title}}</span>
+                      <form method="post">
+                        <button type="submit" name="delete-task" class="delete-task">Delete</button>
+                      </form>
+                      <form method="post">
+                        <button type="submit" name="toggle-task" class="toggle-task">Select</button>
+                      </form>
+                    </div>
+                {{/each}}
+            </fieldset>
+        {{/if}}
+    </section>
+    
+{{else}}
+<div>
+    <form class="login-form" action="/user/login" method="POST">
+        <label for="email">Email</label>
+        <input name="email" type="text"><br>
+        <label for="password">Password</label>
+        <input name="password" type="text"><br>
+        <input type="submit" class="log-in-submit">
+    </form>
+</div>
+
+<div><hr></div>
+
+<div>
+    <form action="/user/register" method="post" class="signup-form" style="display: block;">
+      <input name="fl_name" type="text" class="text-input" placeholder="first &amp; last name">
+      <input name="email" type="email" class="text-input" placeholder="email">
+      <input name="password" type="password" class="text-input" placeholder="password">
+      <input name="password_confirmation" type="password" class="text-input" placeholder="password confirmation">
+      <input class="sign-up-submit" type="submit">
+    </form>
+</div>
+{{/if}}
+
