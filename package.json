@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/exuberantcoyote/cpsc113-todo-nodejs#readme",
   "dependencies": {
+    "body-parser": "^1.14.2",
     "express": "^4.13.4",
     "express-handlebars": "^3.0.0"
   },
